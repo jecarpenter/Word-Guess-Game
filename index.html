@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Hangman</title>
+  </head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Space+Mono&display=swap" rel="stylesheet"> 
+  <body>
+  <div class="container"> 
+    <div class="jumbotron">
+        <h1 class="display-4">Hangman</h1>
+        <p class="lead">Space Theme!</p>
+        <hr class="my-4">
+        <div style="text-align: center; color: black;">
+            <p>Press Any Key To Get Started!</p>
+            <div id="wins">Wins:</div>
+            <br>
+            <p>Current Word</p>
+            <div id="current-word"></div>
+            <br>
+            <p>Number Of Guesses Remaining:</p>
+            <div id="guesses-left"></div>
+            <br>
+            <p> Letters Already Guessed:</p>
+            <div id="incorrect-letters"></div>
+          </div>
+      </div>
+
+  <style type="text/css">
+    
+    body{
+        background-image: url("https://i.redd.it/82ji30z1z4321.jpg"); 
+        background-size: cover;
+        background-repeat: no-repeat;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .display-4 {
+        text-align: center;
+    }
+
+    p.lead {
+        text-align: center;
+    }
+  </style>
+
+    <script>
+    var won = true;
+    var wins = 0;
+    
+    var words = [
+    ["n", "e", "b", "u", "l", "a"], 
+    ["g", "a", "l", "a", "x", "y"], 
+    ["a", "p", "o", "l", "l", "o"], 
+    ["s", "o", "l", "a", "r", "s", "y", "s", "t", "e", "m"], 
+    ["a", "s", "t", "e", "r", "o", "i", "d"], 
+    ["c", "o", "m", "e", "t"], 
+    ["c", "o", "s", "m", "o", "s"], 
+    ["s", "a", "t", "e", "l", "i", "t", "e"]
+    ["t", "e", "l", "e", "s", "c", "o", "p", "e"]
+    ];
+
+    var guessesLeft = 10;
+    var wrongLetters = [];
+    
+    document.getElementById("guesses-left").innerHTML = guessesLeft;
+    var word = words[Math.floor(Math.random() * words.length)]; 
+    var blanks = new Array (word.length);
+    for (var i = 0; i < blanks.length; i++){
+      blanks[i] = "_ ";
+      document.getElementById("current-word").innerHTML = blanks;
+    }
+    function nextWord () {
+      guessesLeft = 10;
+      document.getElementById("guesses-left").innerHTML = guessesLeft;
+      wrongLetters = [];
+      document.getElementById("incorrect-letters").innerHTML = wrongLetters;
+      word = words[Math.floor(Math.random() * words.length)];
+      blanks = new Array (word.length);
+      for (var i = 0; i < blanks.length; i++){
+        blanks[i] = "_ ";
+        document.getElementById("current-word").innerHTML = blanks;
+      }
+      document.getElementById("current-word").innerHTML = blanks;
+    }
+    document.onkeyup = function (event) {
+      var userGuess = event.key;
+     for (var i = 0; i < word.length; i++){
+      if(word[i] === userGuess){
+        blanks[i] = userGuess + " ";
+        var wasCorrect = true;
+        document.getElementById("current-word").innerHTML = blanks;
+      }
+     }
+     if(!wasCorrect && !wrongLetters.includes(userGuess)){
+      wrongLetters.push(userGuess);
+      document.getElementById("incorrect-letters").innerHTML = wrongLetters;
+      guessesLeft--;
+      document.getElementById("guesses-left").innerHTML = guessesLeft;
+     }
+     var correctWord = true;
+     for (var i = 0; i < blanks.length; i++){
+      if(blanks[i] === "_ "){
+        correctWord = false;
+      }
+     }
+     if(correctWord){
+      nextWord();
+      wins++;
+      document.getElementById("wins").innerHTML = "Wins: " + wins;
+     }
+     if(guessesLeft === 0){
+      nextWord();
+     }
+     console.log(wrongLetters);
+    }
+    </script>
+
+  </body>
+</html>
